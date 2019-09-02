@@ -26,3 +26,7 @@ def bar(f):
 bar(foo)
 foo
 ```
+
+```python
+
+```
