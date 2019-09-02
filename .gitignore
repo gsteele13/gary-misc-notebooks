@@ -1,6 +1,3 @@
-# We will use jupytext, so we will now start ignoring ipynb files and sync only the .md files
-
-*.ipynb
 
 # Mac files
 .DS_Store
