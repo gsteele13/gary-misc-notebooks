@@ -71,6 +71,7 @@ def update(i=0):
     plt.ylabel("Residual value")
     plt.subplot(224)
     plt.hist(y-ym[i], bins=50)
+    plt.xlim(-10,10)
     plt.axvline(0,ls=':', c='grey')
     plt.xlabel("Residual value")
     plt.ylabel("Histogram count")
