@@ -286,3 +286,89 @@ print("Err BA", round(np.sqrt(cov_ba[0,0]),dec))
 ```
 
 Naughty cheater!
+
+
+# `curve_fit` with error bars
+
+What happens if we try to give error bars to the curve fit function? 
+
+Interestingly, if I understand correctly, as long as the error bars all have the same value, the actual value of the error bars we specify should not affect the resulting fit parameter error AT ALL.
+
+Let's check this. 
+
+```python
+# Generate data
+Nmax = 50
+x = np.linspace(0,1,int(Nmax))
+y = np.random.normal(size=len(x))*2+2
+```
+
+```python
+def print_fit(name,val,cov):
+    print("Fit name:", name)
+    print("Fit value:", val[0])
+    print("Fit error:", np.sqrt(cov[0,0]))
+    print()
+
+val,cov = curve_fit(f,x,y)
+val_1,cov_1 = curve_fit(f,x,y,sigma=np.ones(len(y)))
+val_10,cov_10 = curve_fit(f,x,y,sigma=np.ones(len(y))*10)
+
+print_fit("No sigma", val, cov)
+print_fit("Sigma 1", val_1, cov_1)
+print_fit("Sigma 10", val_10, cov_10)
+
+plt.figure(figsize=(12,4))
+plt.errorbar(x,y,np.ones(len(y)),capsize=10,ls='None',marker='o')
+plt.errorbar(x,y,10*np.ones(len(y)),capsize=10,ls='None',marker='o')
+plt.show()
+```
+
+## Using error bars to specify  relative error
+
+What does feeding error bars do then? The **relative** size of error bars determines the **relative** weight with which those points contribute to the fit value and error estimate. Their absolute value does not, and should not, matter. 
+
+For example, say we suspect that our experimental apparatus gives an error that increases proportional to the x value. We could then feed in a non-uniform set of error bars: 
+
+```python
+error = 0.1+x
+val,cov = curve_fit(f,x,y,sigma=error)
+print_fit("Non-uniforme error", val,  cov)
+
+
+plt.figure(figsize=(12,4))
+plt.errorbar(x,y,error,capsize=10,ls='None',marker='o')
+plt.axhline(val[0])
+plt.show()
+```
+
+Using these error bars, we  now get a different value of the fitted value, because our error bars are telling the fit that the points near  $x=0$ count "more" than the values near $x=1$
+
+If you  look carefully at the data,  though, then you  can see that the assumption we have made for our error bars are not reflected in the actual statistics of our data samples! In particular, if our error was actually smaller  near $x=0$, then there would be less spread in the points, which is clearly not the case.
+
+(and which, in this case, we know is true since we have created the noise on the data ourselves!)
+
+**Upshot:** Be careful feeding error bars into your fit. If  you don't have to do it,  don't  do  it! And: If you do end up doing it,  make sure that the error  model you choose also is correctly reproduced  by the statistics of the samples of your data. 
+
+
+##  Forcing `curve_fit` to account for your estimation of the error bars (and why  NOT to  do it!)
+
+If somehow we have explicit knowledge that there is uncertainty in the data points that is LARGER than the actual sample variance, we can force this using `absolute_sigma=True`. In this case, the error on our fit parameters is affected by the value of the error bars we feed in:
+
+```python
+val,cov = curve_fit(f,x,y)
+val_1,cov_1 = curve_fit(f,x,y,sigma=np.ones(len(y)), absolute_sigma=True)
+val_10,cov_10 = curve_fit(f,x,y,sigma=np.ones(len(y))*10, absolute_sigma=True)
+
+print_fit("No sigma", val, cov)
+print_fit("Sigma 1", val_1, cov_1)
+print_fit("Sigma 10", val_10, cov_10)
+```
+
+**BUT:** For any decent number of data points in our dataset, we should NEVER use this since the variance of the data points (or more generally, the variance of the residuals of a fit to the correct model) should give a good representation of the ACTUAL error associated with each data point. 
+
+For example, in this case our model is that the function is just a constant value. If we assume that the error is independent of the independent variable (in this case,  $x$), then what we have is a repeated set of identical measurements, and by definition the error on a single measurement is DEFINED as the variance of this set of samples, and there is no reason to manually "add" more error.  In fact,  this is a highly  accurate way of DETERMINING your error.
+
+For  datasets  with a reasonable number of samples (more than 10?), **it is FAR BETTER** to let curve_fit determine the variance for you (by leaving `absolute_sigma=False`) than manually feeding it an error the you estimate in some other way, because this  possibly  incorrect information you give it could cause it to determine an incorrect value for the variance of your samples. 
+
+**Upshot:** Unless you  are really certain  about your error  est
