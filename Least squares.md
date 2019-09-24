@@ -371,4 +371,4 @@ For example, in this case our model is that the function is just a constant valu
 
 For  datasets  with a reasonable number of samples (more than 10?), **it is FAR BETTER** to let curve_fit determine the variance for you (by leaving `absolute_sigma=False`) than manually feeding it an error the you estimate in some other way, because this  possibly  incorrect information you give it could cause it to determine an incorrect value for the variance of your samples. 
 
-**Upshot:** Unless you  are really certain  about your error  est
+**Upshot:** Unless you  are really certain  about your error  estimates, **don't use** `absolute_sigma=True`. And if you really feel compelled to use it, please confirm that your estimated errors are also  well reflected by the statistics  of the samples in your dataset.
