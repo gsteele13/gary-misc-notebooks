@@ -228,8 +228,9 @@ for i in range(len(N)):
     val[i] = v[0]
     err[i] = np.sqrt(e[0,0])
 
-plt.plot(N,val,)
-plt.plot(N,err,)
+plt.plot(N,val)
+plt.plot(N,err)
+plt.axhline(2,ls=':', c='black')
 plt.xscale('log')
 plt.yscale('log')
 
