@@ -327,7 +327,7 @@ plt.show()
 
 ## Using error bars to specify  relative error
 
-What does feeding error bars do then? The **relative** size of error bars determines the **relative** weight with which those points contribute to the fit value and error estimate. Their absolute value does not, and should not, matter. 
+What does feeding error bars do then? A common use of them is that the **relative** size of error bars determines the **relative** weight with which those points contribute to the fit value and error estimate. Their absolute value does not (and should not) matter since if you have a reasonable number of data points, the TRUE (statistical) error on your data points can be directly obtained by looking at the variance of the residuals.  
 
 For example, say we suspect that our experimental apparatus gives an error that increases proportional to the x value. We could then feed in a non-uniform set of error bars: 
 
@@ -347,7 +347,7 @@ Using these error bars, we  now get a different value of the fitted value, becau
 
 If you  look carefully at the data,  though, then you  can see that the assumption we have made for our error bars are not reflected in the actual statistics of our data samples! In particular, if our error was actually smaller  near $x=0$, then there would be less spread in the points, which is clearly not the case.
 
-(and which, in this case, we know is true since we have created the noise on the data ourselves!)
+(and which, in this case, we know is true since we have created the noise in the data ourselves!)
 
 **Upshot:** Be careful feeding error bars into your fit. If  you don't have to do it,  don't  do  it! And: If you do end up doing it,  make sure that the error  model you choose also is correctly reproduced  by the statistics of the samples of your data. 
 
@@ -370,6 +370,6 @@ print_fit("Sigma 10", val_10, cov_10)
 
 For example, in this case our model is that the function is just a constant value. If we assume that the error is independent of the independent variable (in this case,  $x$), then what we have is a repeated set of identical measurements, and by definition the error on a single measurement is DEFINED as the variance of this set of samples, and there is no reason to manually "add" more error.  In fact,  this is a highly  accurate way of DETERMINING your error.
 
-For  datasets  with a reasonable number of samples (more than 10?), **it is FAR BETTER** to let curve_fit determine the variance for you (by leaving `absolute_sigma=False`) than manually feeding it an error the you estimate in some other way, because this  possibly  incorrect information you give it could cause it to determine an incorrect value for the variance of your samples. 
+For  datasets  with a reasonable number of samples (more than 10?), **it is FAR BETTER** to let `curve_fit` determine the variance for you (by leaving `absolute_sigma=False`) than manually feeding it an error the you estimate in some other way, because this  possibly  incorrect information you give it could cause it to determine an incorrect value for the uncertainty in your fit parameters. 
 
-**Upshot:** Unless you  are really certain  about your error  estimates, **don't use** `absolute_sigma=True`. And if you really feel compelled to use it, please confirm that your estimated errors are also  well reflected by the statistics  of the samples in your dataset.
+**Upshot:** Unless you  are really 10000% certain  about your error estimates, and maybe if you have a very small sample set of data (10 points?), **DO NOT USE** `absolute_sigma=True`. And if you really feel compelled to use it, please double-check that your estimated errors are also  well reflected by the statistics  of the samples in your dataset.
