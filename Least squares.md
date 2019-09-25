@@ -186,6 +186,8 @@ def make_plots(N):
     plt.subplot(121)
     plt.plot(x,y)
     plt.plot(x,a_fit*np.ones(len(x)))
+    plt.xlabel("x")
+    plt.ylabel("y")
     plt.subplot(122)
     plt.plot(a,chi2,'.-')
     plt.axvline(a_fit, ls=':', c='black')
@@ -193,12 +195,27 @@ def make_plots(N):
     plt.axvline(a_fit+a_err, ls=':', c='grey')
     plt.axvline(a_fit-2*a_err, ls=':', c='grey')
     plt.axvline(a_fit+2*a_err, ls=':', c='grey')
+    plt.xlabel("a")
+    plt.ylabel("$\chi^2$")
     plt.show()
 ```
 
 ```python
 make_plots(100)
 ```
+
+On the right plot, the black dashed line shows the fitted value of $a$ for this data set. The closer set of dashed grey lines show the $1\sigma$ error band, and the second set of dashed grey lines show the $2\sigma$ error band. 
+
+Of course, we know the "correct" value of $a$ to be 2. But the fitted value is not always 2, of course, because of the noise and the small number of data points. 
+
+But: is the fitted value "equal" to the true value to within the "error margin"? 
+
+If you re-run the cell, it will generate a different set of random noise and perform the fit again. Try re-running it a bunch of times. How often does the fitted value "not agree" (to within $1\sigma$) with the true value? 
+
+*(Answer: the $1\sigma$ error criterion says that the fitted value and true value should "agree" 66% of the time. Which means that 33% of the time, one time in three, they should not "agree"! If you take the outer set of lines, the $2\sigma$ error band, then they should "agree" 90% of the time, meaning that on average, only one time out of 10, the value 2 will fall outside the second set of grey lines.)*
+
+
+If we add more points, we can see that our error margins will get smaller, but that the same should hold as above: the true value will fall outside of the $1\sigma$ error band of the fitted value 1/3 of the time.
 
 ```python
 make_plots(1000)
