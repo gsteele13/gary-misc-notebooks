@@ -329,15 +329,15 @@ def print_fit(name,val,cov):
     print()
 
 val,cov = curve_fit(f,x,y)
-val_1,cov_1 = curve_fit(f,x,y,sigma=np.ones(len(y)))
+val_01,cov_01 = curve_fit(f,x,y,sigma=np.ones(len(y))*0.1)
 val_10,cov_10 = curve_fit(f,x,y,sigma=np.ones(len(y))*10)
 
 print_fit("No sigma", val, cov)
-print_fit("Sigma 1", val_1, cov_1)
+print_fit("Sigma 0.1", val_01, cov_01)
 print_fit("Sigma 10", val_10, cov_10)
 
 plt.figure(figsize=(12,4))
-plt.errorbar(x,y,np.ones(len(y)),capsize=10,ls='None',marker='o')
+plt.errorbar(x,y,0.1*np.ones(len(y)),capsize=10,ls='None',marker='o')
 plt.errorbar(x,y,10*np.ones(len(y)),capsize=10,ls='None',marker='o')
 plt.show()
 ```
@@ -375,15 +375,21 @@ If somehow we have explicit knowledge that there is uncertainty in the data poin
 
 ```python
 val,cov = curve_fit(f,x,y)
-val_1,cov_1 = curve_fit(f,x,y,sigma=np.ones(len(y)), absolute_sigma=True)
+val_01,cov_01 = curve_fit(f,x,y,sigma=np.ones(len(y))*0.1)
 val_10,cov_10 = curve_fit(f,x,y,sigma=np.ones(len(y))*10, absolute_sigma=True)
 
 print_fit("No sigma", val, cov)
-print_fit("Sigma 1", val_1, cov_1)
+print_fit("Sigma 1", val_01, cov_01)
 print_fit("Sigma 10", val_10, cov_10)
 ```
 
-**BUT:** For any decent number of data points in our dataset, we should NEVER use this since the variance of the data points (or more generally, the variance of the residuals of a fit to the correct model) should give a good representation of the ACTUAL error associated with each data point. 
+Remember, here the "real" error on the data points is 1 (this is the sigma of the random noise distribution we used to make the "fake" data.)
+
+Note that if I *undererstimate* the error (0.1), the least square fit will just ignore my poor underestimate and pick its parameter error based on the actual variance of the data. 
+
+However, if I *overestimate* the erorr (10), then my fit parameters get unrealistically large errors, since the least squares fit will assume there is some additional error that is mysteriously not captured by the variance of the samples of the data. 
+
+**What should I do?** For any decent number of data points in our dataset, we should NEVER use this since the variance of the data points (or more generally, the variance of the residuals of a fit to the correct model) should give a good representation of the ACTUAL error associated with each data point. 
 
 For example, in this case our model is that the function is just a constant value. If we assume that the error is independent of the independent variable (in this case,  $x$), then what we have is a repeated set of identical measurements, and by definition the error on a single measurement is DEFINED as the variance of this set of samples, and there is no reason to manually "add" more error.  In fact,  this is a highly  accurate way of DETERMINING your error.
 
