@@ -299,8 +299,8 @@ Let's check this.
 
 ```python
 # Generate data
-Nmax = 50
-x = np.linspace(0,1,int(Nmax))
+N = 50
+x = np.linspace(0,1,int(N))
 y = np.random.normal(size=len(x))*2+2
 ```
 
