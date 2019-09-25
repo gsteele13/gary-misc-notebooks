@@ -208,7 +208,7 @@ On the right plot, the black dashed line shows the fitted value of $a$ for this 
 
 Of course, we know the "correct" value of $a$ to be 2. But the fitted value is not always 2, of course, because of the noise and the small number of data points. 
 
-But: is the fitted value "equal" to the true value to within the "error margin"? 
+**Question:** is the fitted value "equal" to the true value to within the "error margin"? 
 
 If you re-run the cell, it will generate a different set of random noise and perform the fit again. Try re-running it a bunch of times. How often does the fitted value "not agree" (to within $1\sigma$) with the true value? 
 
