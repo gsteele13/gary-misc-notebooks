@@ -215,7 +215,7 @@ If you re-run the cell, it will generate a different set of random noise and per
 *(Answer: the $1\sigma$ error criterion says that the fitted value and true value should "agree" 66% of the time. Which means that 33% of the time, one time in three, they should not "agree"! If you take the outer set of lines, the $2\sigma$ error band, then they should "agree" 90% of the time, meaning that on average, only one time out of 10, the value 2 will fall outside the second set of grey lines.)*
 
 
-If we add more points, we can see that our error margins will get smaller, but that the same should hold as above: the true value will fall outside of the $1\sigma$ error band of the fitted value 1/3 of the time.
+If we add more data points, we can see that our error margins will get smaller, but that the same should hold as above: the true value will fall outside of the $1\sigma$ error band of the fitted value 1/3 of the time.
 
 ```python
 make_plots(1000)
