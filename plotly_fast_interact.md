@@ -32,7 +32,7 @@ scatt = fig.data[0]
 ```
 
 ```python
-xs=np.linspace(0, 6, 100)
+xs=np.linspace(0, 6, 1000)
 
 @interact(a=(1.0, 4.0, 0.01), b=(0, 10.0, 0.01), color=['red', 'green', 'blue'])
 def update(a=3.6, b=4.3, color='blue'):
@@ -45,5 +45,6 @@ fig
 ```
 
 ```python
-
+import plotly
+print(plotly.__version__)
 ```
