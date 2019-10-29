@@ -64,10 +64,32 @@ sigma = 5.6e-8 # W/m^2/K^4
 A2 = np.pi * (d2/2)**2 # Here: only top side
 eps = 0.05 # estimated emissivitity of polished copper
 
-print("Radiative heat load on 4K plate no shields:   %.2f W" % (eps*sigma*300**4))
-print("Radiative heat load on 4K plate with shields: %.2f W" % (eps*sigma*50**4))
+print("Radiative heat load on 4K plate no shields:   %.3f W" % (eps*sigma*300**4*A2))
+print("Radiative heat load on 4K plate with shields: %.3f W" % (eps*sigma*50**4*A2))
 ```
 
-```python
+# Radiative heat load Entropy 300 mK
 
+Heat flux $j$ in W/m^2:
+
+$$
+j = \sigma T^4
+$$
+
+* Diameter of old 300 mK plate: 5 cm ?
+* Diameter of new 300 mK plate: 15 cm ?
+
+Of course, the number for the old 300 mK plate is a massive underestimate since the radiation geometry is not dominantly "parallel plate". A "sphere in a sphere" would probably be a better estimate, but let's just check order of magnitude for now. 
+
+
+```python
+d1 = 5e-2
+d2 = 15e-2
+sigma = 5.6e-8 # W/m^2/K^4
+A1 = np.pi * (d1/2)**2 
+A2 = np.pi * (d2/2)**2 
+eps = 0.05 # estimated emissivitity of polished copper
+
+print("Radiative heat load 5 cm : %.3f uW" % (A1*eps*sigma*4**4*1e6))
+print("Radiative heat load 15 cm: %.3f uW" % (A2*eps*sigma*4**4*1e6))
 ```
