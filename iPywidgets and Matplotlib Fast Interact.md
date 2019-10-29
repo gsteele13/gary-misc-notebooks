@@ -59,7 +59,7 @@ def makeplot3(x0 = 0):
     Z = np.sin(5*(X-x0))*np.exp(-X**2-Y**2)
     ax_image.set_data(Z)
 
-interact(makeplot3,x0=(-5,5,0.1))
+interact(makeplot3,x0=(-1,1,0.1))
 
 ```
 
