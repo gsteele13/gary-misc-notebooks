@@ -205,8 +205,12 @@ def update_plot2(m2=1, kc=0.1):
         w,v = find_modes(m2=m2, k2=k2, kc=kc)
         spectrum.append(w)
     spectrum = np.array(spectrum)
-    plt.plot(k2vals, spectrum[:,0], '.')
-    plt.plot(k2vals, spectrum[:,1], '.')
+    plt.plot(k2vals**0.5, spectrum[:,0], '.')
+    plt.plot(k2vals**0.5, spectrum[:,1], '.')
+    x = plt.xlim()
+    plt.plot(x,[1,1],ls=':', c='grey')
+    plt.plot([0,1.5],[0,1.5],ls=':', c='grey')
+    plt.ylim(0,1.75)
     
 interact(update_plot2, m2=(0.1,2,0.1), kc=(0.0,0.5,0.02));
 ```

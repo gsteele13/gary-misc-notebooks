@@ -20,10 +20,10 @@ from ipywidgets import interact
 ```
 
 ```python
-x = np.linspace(0,10,100)
-```
+%matplotlib inline
 
-```python
+x = np.linspace(0,10,100)
+
 def makeplot1(ph = 0):
     plt.plot(x,np.sin(x+ph))
     
@@ -49,7 +49,7 @@ interact(makeplot2, ph=(0,10,0.1))
 ```
 
 ```python
-x = np.linspace(-3,3,100)
+x = np.linspace(-3,3,1000)
 X,Y = np.meshgrid(x,x)
 x0 = 0
 Z = np.sin(5*(X-x0))*np.exp(-X**2-Y**2)
