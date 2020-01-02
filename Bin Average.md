@@ -13,6 +13,10 @@ jupyter:
     name: python3
 ---
 
+```python
+import numpy as np
+```
+
 # Bin averaging
 
 My personally favourite alternative since it produces a reduction of the noise of your data while producing ZERO addition correlations between data points 
@@ -49,4 +53,27 @@ np.reshape(x[0:N*navg],(N,navg))
 
 ```python
 np.average(np.reshape(x[0:N*navg],(N,navg)),axis=1)
+```
+
+# Moving average filter
+
+A moving average filter that is reasonably fast? 
+
+This one is handy:
+
+https://stackoverflow.com/questions/13728392/moving-average-or-running-mean/27681394#27681394
+
+```python
+def moving_average(x, N):
+    cumsum = np.cumsum(np.insert(x, 0, 0)) 
+    return (cumsum[N:] - cumsum[:-N]) / float(N)
+```
+
+```python
+x2 = np.array(range(10))
+x2
+```
+
+```python
+moving_average(x2,2)
 ```
