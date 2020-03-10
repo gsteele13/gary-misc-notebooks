@@ -43,7 +43,7 @@ plt.plot(t,x)
 plt.plot(t,y)
 ```
 
-## A try with matplotlib inline update
+## A try with matplotlib notebook update
 
 
 ```python
