@@ -5,8 +5,8 @@ jupyter:
     text_representation:
       extension: .md
       format_name: markdown
-      format_version: '1.1'
-      jupytext_version: 1.2.2
+      format_version: '1.2'
+      jupytext_version: 1.3.2
   kernelspec:
     display_name: Python 3
     language: python
@@ -57,9 +57,12 @@ ax_image = plt.imshow(Z,cmap='RdBu')
 
 def makeplot3(x0 = 0):
     Z = np.sin(5*(X-x0))*np.exp(-X**2-Y**2)
-    ax_image.set_data(Z)
 
 interact(makeplot3,x0=(-1,1,0.1))
+
+```
+
+```python
 
 ```
 
