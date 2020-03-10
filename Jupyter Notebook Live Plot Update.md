@@ -31,7 +31,7 @@ def get_traces():
     t0 = np.random.random()*10
     t = np.linspace(0,15,N)
     x = sawtooth(t+t0,width=0.5)*3
-    y = sawtooth(t+t0,width=0.5)*8
+    y = np.exp(x/2)
     x += np.random.normal(size=N)*0.2
     y += np.random.normal(size=N)*0.1
     return x,y,t
@@ -114,37 +114,36 @@ from bokeh.models import ColumnDataSource
 
 p = figure(title="X vs Random Number Generator", plot_height=350, plot_width=800)
 x,y,t = get_traces()
-source = ColumnDataSource(data=dict(x=t, y=x))
-p.line('x', 'y', source=source)
+source1 = ColumnDataSource(data=dict(x=t, y=x))
+source2 = ColumnDataSource(data=dict(x=t, y=x))
+p.line('x', 'y', source=source1)
+p.line('x', 'y', source=source2)
 target = show(p, notebook_handle=True)
 
 while True:
     x,y,t = get_traces()
-    source.data = dict(x=t, y=x)
+    source1.data = dict(x=t, y=x)
+    source2.data = dict(x=t, y=y)
     push_notebook(handle=target)
     sleep(0.001)
 ```
 
-Let's try a simpler example.
-
 ```python
-from bokeh.io import output_notebook, show
-from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource
 
-output_notebook()
-
-# create a new plot with default tools, using figure
-p = figure(plot_width=400, plot_height=400)
-
-x = np.linspace(0,100)
-source = ColumnDataSource(data=dict(x=x, y=x**2))
-p.line('x', 'y', source=source)
+p = figure(title="X vs Random Number Generator", plot_height=600, plot_width=600)
+x,y,t = get_traces()
+source1 = ColumnDataSource(data=dict(x=x, y=y))
+p.line('x', 'y', source=source1)
 target = show(p, notebook_handle=True)
 
+while True:
+    x,y,t = get_traces()
+    source1.data = dict(x=x, y=y)
+    push_notebook(handle=target)
+    sleep(0.001)
 ```
 
 ```python
-source.data = dict(x=x,y=x)
-push_notebook(handle=target)
+
 ```
