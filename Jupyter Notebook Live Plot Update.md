@@ -70,13 +70,13 @@ while True:
     fig.canvas.draw()
 ```
 
-The matplotlib notebook driver is just plain flaky...try bokeh
+The matplotlib notebook driver is a bit flaky. Why is my plot so small? And why does it not update when I drag the handle? 
 
 
 ## Try with Bokeh
 
 
-An internet site suggested that this should work, but it doesn't...
+An internet site suggested that this should work, but it doesn't...it keeps adding more lines!
 
 ```python
 from bokeh.plotting import figure, show
@@ -99,14 +99,14 @@ for i in range(100):
     sleep(0.001)
 ```
 
-```python
-from bokeh.plotting import figure, show
-from bokeh.io import output_notebook, push_notebook
-output_notebook()
+It seems that if I use `ColumnDataSource` that if I update the dict, it should trigger a replot? 
 
-from math import pi
-import numpy as np
-from time import sleep
+https://stackoverflow.com/questions/34970704/what-is-a-fast-and-proper-way-to-refresh-update-plots-in-bokeh-0-11-server-app
+
+But it doesn't. And I don't know why.
+
+```python
+from bokeh.models import ColumnDataSource
 
 p = figure(title="X vs Random Number Generator", plot_height=350, plot_width=800)
 target = show(p, notebook_handle=True)
@@ -120,4 +120,8 @@ for i in range(100):
     source.data = dict(x=t, y=x)
     push_notebook(handle=target)
     sleep(0.001)
+```
+
+```python
+
 ```
