@@ -76,7 +76,11 @@ The matplotlib notebook driver is a bit flaky. Why is my plot so small? And why 
 ## Try with Bokeh
 
 
-An internet site suggested that this should work, but it doesn't...it keeps adding more lines!
+An internet site suggested that this should work:
+
+https://medium.com/@siZHky/update-plots-live-on-jupyter-notebook-with-bokeh-836a0b5aaf20
+
+but it doesn't...it keeps adding more lines!
 
 ```python
 from bokeh.plotting import figure, show
@@ -109,15 +113,38 @@ But it doesn't. And I don't know why.
 from bokeh.models import ColumnDataSource
 
 p = figure(title="X vs Random Number Generator", plot_height=350, plot_width=800)
-target = show(p, notebook_handle=True)
-
 x,y,t = get_traces()
 source = ColumnDataSource(data=dict(x=t, y=x))
 p.line('x', 'y', source=source)
+target = show(p, notebook_handle=True)
 
-for i in range(100):
+while True:
     x,y,t = get_traces()
     source.data = dict(x=t, y=x)
     push_notebook(handle=target)
     sleep(0.001)
+```
+
+Let's try a simpler example.
+
+```python
+from bokeh.io import output_notebook, show
+from bokeh.plotting import figure
+from bokeh.models import ColumnDataSource
+
+output_notebook()
+
+# create a new plot with default tools, using figure
+p = figure(plot_width=400, plot_height=400)
+
+x = np.linspace(0,100)
+source = ColumnDataSource(data=dict(x=x, y=x**2))
+p.line('x', 'y', source=source)
+target = show(p, notebook_handle=True)
+
+```
+
+```python
+source.data = dict(x=x,y=x)
+push_notebook(handle=target)
 ```
