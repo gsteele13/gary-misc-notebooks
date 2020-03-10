@@ -121,7 +121,3 @@ for i in range(100):
     push_notebook(handle=target)
     sleep(0.001)
 ```
-
-```python
-
-```
