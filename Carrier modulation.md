@@ -91,10 +91,6 @@ def plot_power_spectrum(T,N_per_osc):
 ```
 
 ```python
-np.where(fs >= 0.975)[0][0]
-```
-
-```python
 plt.subplots(figsize=(14,8))
 plot_power_spectrum(1000,50)
 plot_power_spectrum(1000,100)
@@ -111,6 +107,39 @@ Furthermore, the FFT does use implicit periodic boundary  conditions, so the ans
 
 If I understand correctly, the time domain waveform I've created should be an exact basis state of the Fourier basis (well, an exact superposition of two with positive and negative frequency). So why is this not a delta function? 
 
+Anton had the answer: I had one point too many! `endpoint` is a handy parameter for `np.linspace`:
+
+```python
+def plot_power_spectrum_fixed(T,N_per_osc):
+    N = T * N_per_osc # this will set our nyquist frequency
+    t = np.linspace(0,T,N,endpoint=False)
+    v = np.cos(2*np.pi*t) # 1 secon period
+    vt = np.fft.fft(v)
+
+    # For plotting, let's shift them
+    vts = np.fft.fftshift(vt)
+    fs = np.fft.fftshift(np.fft.fftfreq(len(v), d=t[1]))
+    
+    # Calculate power spectrum and normalise it
+    power = np.abs(vts)**2
+    power /= max(power)
+    
+    span = 0.1
+    n1 = np.where(fs >= 1-span/2)[0][0]
+    n2 = np.where(fs >= 1+span/2)[0][0]
+    
+    plt.plot(fs[n1:n2],power[n1:n2],"o-",label=f"T = {T}, N_per_osc = {N_per_osc}")
+    plt.yscale('log')
+```
+
+```python
+plt.subplots(figsize=(14,8))
+plot_power_spectrum_fixed(1000,50)
+plot_power_spectrum_fixed(1000,100)
+plot_power_spectrum_fixed(2000,50)
+plot_power_spectrum_fixed(2000,100)
+plt.legend()
+```
 
 ## Now: try amplitude noise
 
