@@ -141,6 +141,9 @@ plot_power_spectrum_fixed(2000,100)
 plt.legend()
 ```
 
+Awesome, now it's really only just rounding error!
+
+
 ## Now: try amplitude noise
 
 In the units above, let's make a amplitude noise spectrum that has a cutoff of 20 mHz. 
