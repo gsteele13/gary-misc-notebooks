@@ -88,7 +88,7 @@ plt.show()
 
 plt.plot(p(f_spec), p(spec))
 plt.xlim((40,60))
-plt.ylim((1e-6,1e1))
+plt.ylim((1e-8,1e-1))
 plt.yscale('log')
 plt.show()
 
@@ -97,6 +97,10 @@ plt.plot(p(f_spec), p(spec))
 span = 0.5
 plt.xlim((50-span/2,50+span/2))
 plt.show()
+```
+
+```python
+len(x)
 ```
 
 ```python
