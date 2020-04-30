@@ -25,7 +25,7 @@ plt.rcParams['figure.figsize'] = (12,4)
 fs = 500
 
 # Total time trace length in seconds
-T = 1000
+T = 100000
 
 # mechanical frequency in Hz 
 f0 = 50 
@@ -75,7 +75,7 @@ def decimate(x, n):
 
 spec = np.abs(x_t)**2/(fs*T)**2
 
-win = 10
+win = T//1000
 f_spec = decimate(f, win)
 spec = decimate(spec, win)
 
@@ -90,7 +90,13 @@ plt.plot(p(f_spec), p(spec))
 plt.xlim((40,60))
 plt.ylim((1e-6,1e1))
 plt.yscale('log')
+plt.show()
 
+
+plt.plot(p(f_spec), p(spec))
+span = 0.5
+plt.xlim((50-span/2,50+span/2))
+plt.show()
 ```
 
 ```python
@@ -132,5 +138,9 @@ plt.show()
 plt.plot(t_dec, Ph_dec)
 plt.xlim((0,20))
 plt.show()
+
+```
+
+```python
 
 ```
