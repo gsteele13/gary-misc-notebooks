@@ -100,10 +100,6 @@ plt.show()
 ```
 
 ```python
-len(x)
-```
-
-```python
 # Let's try to make quadrature plots
 
 # First, feed the signal into a mixer, frequency shifting one of the
