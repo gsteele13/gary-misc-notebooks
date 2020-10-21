@@ -17,7 +17,22 @@ jupyter:
 import pysmu
 import numpy as np
 import matplotlib.pyplot as plt
+from time import time
 ```
+
+<!-- #region -->
+# About the ADALM1000
+
+Single ended, 0-5V outputs. 16 bit A/D. 33 euro!
+
+https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/ADALM1000.html
+
+https://nl.mouser.com/ProductDetail/Analog-Devices/ADALM1000?qs=%2Fha2pyFadugQqSFxi2NeIujZS3V7x7wPiD8SBcvPPDW36IVeWQ4Heg%3D%3D
+
+http://analogdevicesinc.github.io/libsmu/
+
+https://github.com/analogdevicesinc/libsmu
+
 
 # Getting started
 
@@ -36,6 +51,7 @@ But very little documentation of the python API...seems like the documentation i
 https://github.com/analogdevicesinc/libsmu/blob/master/bindings/python/pysmu/libsmu.pyx
 
 Let's start by at least connecting to it.
+<!-- #endregion -->
 
 ```python
 session = pysmu.Session()
@@ -94,6 +110,63 @@ Sounds like a good start :)
 
 Well, was a bit useful, but I'm still not further. Let's try a focussed approach: googling to try to achieve my task of reading out the resistance of a PT1000 sensor. 
 
+Let's also check how the driver handles sessions: do you have to close them? 
+
+```python
+session1= pysmu.Session()
+```
+
+```python
+show(session1)
+```
+
+```python
+session2 = pysmu.Session()
+```
+
+OK, clear, we need to end the session first.
+
+```python
+session1.end()
+```
+
+```python
+session2 = pysmu.Session()
+```
+
+OK, ending it is not enough...
+
+```python
+session1.cancel()
+```
+
+```python
+session2 = pysmu.Session()
+```
+
+Also not cancelling it...
+
+```python
+del(session1)
+```
+
+```python
+session2 = pysmu.Session()
+```
+
+Hmmm...also not deleting the session object... Restarting the kernel does work...
+
+```python
+import pysmu
+session2 = pysmu.Session()
+```
+
+```python
+help(session2)
+```
+
+OK, it seems there is not way to close a session aside from restarting the kernel...? I guess this is fine, just make sure to create a session at the top of the notebook.
+
 
 # Goal: PT1000 sensor readout
 
@@ -119,3 +192,145 @@ I think I'll dig into this code:
 
 https://github.com/analogdevicesinc/alice/blob/Version-1.3/ohm-meter-vdiv-1.3.pyw
 
+Looks like I can probably find what I need there. 
+
+## The measurement
+
+Probably, makes sense to set it up in "Source current, Measure Voltage" (SIMV) mode. 
+
+What current to use? 
+
+Well, the inputs are limited to 5V. A PT1000 should be 1000 ohms at room temperature (300K) and should (?) have a linear temperature dependence that extrapolates to zero at 0K. 
+
+To have a readout of 5V at 300K, we could therefore use a source current of 5 mA. At 77K, the readout voltage would then be 1.28. We would have 16.6 mV/C. This would give us a theoretical temperature resolution of 4.5 mK! Should be enough.
+
+```python
+dev =  session.devices[0]
+chA = dev.channels["A"]
+
+# Put channel in "source current, measure voltage"
+chA.mode = pysmu.Mode.SIMV
+
+# Set the current to 4 mA? 
+chA.constant(0.004)
+
+# Get 10 samples
+chA.get_samples(10)
+```
+
+Seems to work!
+
+```python
+N =  1e6
+t0 = time()
+voltage = np.array(chA.get_samples(N))[:,0]
+t1 = time()
+print("%.1f seconds" % (t1-t0))
+print("%e sec per point" % ((t1-t0)/N))
+plt.plot(voltage)
+plt.show()
+```
+
+Strange, I wonder what this time constant is? Let's try repeating it.
+
+```python
+N =  1e6
+t0 = time()
+voltage = np.array(chA.get_samples(N))[:,0]
+t1 = time()
+print("%.1f seconds" % (t1-t0))
+print("%e sec per point" % ((t1-t0)/N))
+plt.plot(voltage)
+plt.show()
+```
+
+Pretty reproducible? It could be the PT100 heating up? On CH B, I have a regular (carbon) 1 kOhm(ish). 
+
+```python
+chB = dev.channels["B"]
+chB.mode = pysmu.Mode.SIMV
+chB.constant(0.004)
+```
+
+```python
+N =  1e6
+t0 = time()
+voltage = np.array(chB.get_samples(N))[:,0]
+t1 = time()
+print("%.1f seconds" % (t1-t0))
+print("%e sec per point" % ((t1-t0)/N))
+plt.plot(voltage)
+plt.show()
+```
+
+OK, looks likely that that is the case! The PT1000 is quite close to the bard, maybe turning on the readout is heating it up a bit. 
+
+Let's use ChB to get a handle on the noise we might expect. 
+
+```python
+np.std(voltage)
+```
+
+With a 10 $\mu$s averaging time, we have about 3.7 mV = 0.25 K. But  say  we measure for 10 ms: this corresponds to averaging about 1000 points together. 
+
+```python
+v_avg =  np.average(np.reshape(voltage,(1000,len(voltage)//1000)), axis=0)
+```
+
+```python
+plt.plot(v_avg)
+```
+
+```python
+np.std(v_avg)
+```
+
+```python
+N =  1e5
+t0 = time()
+voltage = np.array(chA.get_samples(N))[:,0]
+t1 = time()
+print("%.1f seconds" % (t1-t0))
+print("%e sec per point" % ((t1-t0)/N))
+plt.plot(voltage)
+plt.show()
+```
+
+```python
+plt.plot(voltage/4.4*300)
+```
+
+```python
+def decimate(x,N):
+    return np.average(np.reshape(x,(len(x)//N, N)), axis=1)
+```
+
+```python
+plt.plot(decimate(voltage,1000)/4.4*300)
+```
+
+```python
+from bokeh.models import ColumnDataSource
+from bokeh.io import output_notebook, push_notebook
+from bokeh.plotting import figure, show
+output_notebook()
+```
+
+```python
+T = []
+N=1000
+
+p = figure(plot_height=300, plot_width=900)
+source = ColumnDataSource()
+source.data  = dict(x=[0,0],y=[0,0])
+p.line('x','y',source=source)
+target = show(p,notebook_handle=True)
+
+n=1
+while True:
+    meas = np.average(np.array(chA.get_samples(N))[:,0])/4.4*300
+    T.append(meas)
+    source.data =  dict(x=range(n),y=T)
+    n += 1
+    push_notebook(handle=target)
+```
