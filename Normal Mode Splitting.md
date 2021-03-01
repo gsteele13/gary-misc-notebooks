@@ -5,8 +5,8 @@ jupyter:
     text_representation:
       extension: .md
       format_name: markdown
-      format_version: '1.1'
-      jupytext_version: 1.2.2
+      format_version: '1.3'
+      jupytext_version: 1.10.1
   kernelspec:
     display_name: Python 3
     language: python
@@ -139,7 +139,6 @@ def plot_eigenvectors(w, v):
 plot_eigenvectors(w,v)
 ```
 
-<!-- #region -->
 We now want to explore what happens to the frequency and motion of the masses as we change the masses and spring constants. We will keep the mass and spring constant of the first mass fixed, and allow the mass and spring constant of the other mass to vary. 
 
 **Exercise:** Write a function to find the normal modes and their frequencies, with `m2`, `k2`, and `kc` as keyword parameters that default to 1, 1, and 0.1 respectively.
@@ -149,7 +148,6 @@ def find_modes(m2=1, k2=1, kc=0.1):
     ...
     return w, v
 ```
-<!-- #endregion -->
 
 ```python
 # Solutions
