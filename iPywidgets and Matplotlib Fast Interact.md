@@ -5,8 +5,8 @@ jupyter:
     text_representation:
       extension: .md
       format_name: markdown
-      format_version: '1.2'
-      jupytext_version: 1.3.2
+      format_version: '1.3'
+      jupytext_version: 1.10.1
   kernelspec:
     display_name: Python 3
     language: python
@@ -49,21 +49,40 @@ interact(makeplot2, ph=(0,10,0.1))
 ```
 
 ```python
-x = np.linspace(-3,3,1000)
+%matplotlib widget
+```
+
+```python
+x = np.linspace(-3,3,200)
+X,Y = np.meshgrid(x,x)
+x0 = 0
+plt.figure()
+Z = np.sin(5*(X-x0))*np.exp(-X**2-Y**2)
+plt.subplot(121)
+ax_image = plt.imshow(Z,cmap='RdBu')
+plt.subplot(122)
+plt.plot(Z[0:,])
+
+def makeplot3(x0 = 0):
+    Z = np.sin(5*(X-x0))*np.exp(-X**2-Y**2)
+    ax_image.set_data(Z)
+
+interact(makeplot3,x0=(-1,1,0.1))
+```
+
+```python
+x = np.linspace(-3,3,200)
 X,Y = np.meshgrid(x,x)
 x0 = 0
 Z = np.sin(5*(X-x0))*np.exp(-X**2-Y**2)
+plt.figure()
 ax_image = plt.imshow(Z,cmap='RdBu')
 
 def makeplot3(x0 = 0):
     Z = np.sin(5*(X-x0))*np.exp(-X**2-Y**2)
+    ax_image.set_data(Z)
 
 interact(makeplot3,x0=(-1,1,0.1))
-
-```
-
-```python
-
 ```
 
 ```python

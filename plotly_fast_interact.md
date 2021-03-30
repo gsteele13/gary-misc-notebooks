@@ -5,8 +5,8 @@ jupyter:
     text_representation:
       extension: .md
       format_name: markdown
-      format_version: '1.1'
-      jupytext_version: 1.2.2
+      format_version: '1.3'
+      jupytext_version: 1.10.1
   kernelspec:
     display_name: Python 3
     language: python
@@ -62,6 +62,8 @@ $$
 ```python
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
+
+
 
 def amp(w, zeta):
     return 1.0 / np.sqrt((2*zeta*w)**2 + (w**2-1)**2)
