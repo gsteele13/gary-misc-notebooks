@@ -13,6 +13,8 @@ jupyter:
     name: python3
 ---
 
+# Hand-coded callbacks implementation
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -47,7 +49,57 @@ P.open_plot()
 a_slider = widgets.FloatSlider(min=0, max=1, step=0.01, value=P.a)
 def a_slider_cb(w):
     P.a = a_slider.value
-    P.update_plot()
 a_slider.observe(a_slider_cb)
 display(a_slider)
+```
+
+# Example using trailets
+
+From Anton's suggestion:
+
+https://forum.kavli.tudelft.nl/t/linking-widgets-to-class-attributes-and-class-attributes-to-actions/160/2
+
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+import ipywidgets as widgets
+from traitlets import HasTraits, link, Float, observe
+
+%matplotlib ipympl
+
+# Plotter is in this way a subclass of HasTraits
+class Plotter(HasTraits):
+    a = Float(1.0)
+    b = Float(0)
+    x = np.linspace(0,10)
+    
+    def open_plot(self):
+        fig, ax = plt.subplots()
+        self.line, = ax.plot(x,self.a*np.sin(x+self.b))
+
+    @observe('a', 'b')
+    def update_plot(self, value):
+        self.line.set_data(x,self.a*np.sin(x+self.b))
+
+# Create object, open plot
+P = Plotter()
+P.open_plot()
+
+# Trailet linking, this is a lot nicer!
+a_slider = widgets.FloatSlider(min=0, max=1, step=0.01, value=P.a)
+link((a_slider, "value"), (P, "a"))
+b_slider = widgets.FloatSlider(min=0, max=np.pi, step=0.01, value=P.b)
+link((b_slider, "value"), (P, "b"))
+
+# Display widgets
+display(widgets.HBox([a_slider, b_slider]))
+```
+
+```python
+P.a = 0
+```
+
+```python
+
 ```
