@@ -28,14 +28,12 @@ class Foo:
         for k in attributes: 
             if k[0] != "_" and not callable(eval("self."+k)):
                 settings[k] = eval("self."+k)
-        print(settings)
         with open("settings.json", "w") as f:
             json.dump(settings, f, indent=4)
     
     def load_settings(self):
         with open("settings.json", "r") as f:
             settings = jason.load(f)
-        print(settings)
         # Backward compatibility could be handled here by 
         # using an except() statement, as long as we don't
         # rename things (in which case we would need to 
