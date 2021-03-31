@@ -34,10 +34,13 @@ class Foo:
     
     def load_settings(self):
         with open("settings.json", "r") as f:
-            settings = json.load(f)
+            settings = jason.load(f)
         print(settings)
         # Backward compatibility could be handled here by 
-        # using an except() statement
+        # using an except() statement, as long as we don't
+        # rename things (in which case we would need to 
+        # maintain a name mapping dict or something like 
+        # that)
         for k in settings.keys():
             exec(f"self.{k} = settings['{k}']")       
 ```
