@@ -13,6 +13,8 @@ jupyter:
     name: python3
 ---
 
+# My first hack
+
 ```python
 import json
 
@@ -45,6 +47,10 @@ class Foo:
 
 ```python
 F = Foo()
+F.a
+```
+
+```python
 F.a = 100
 ```
 
@@ -66,4 +72,116 @@ F.load_settings()
 
 ```python
 F.a
+```
+
+# An improvement from Slava
+
+```python
+import json
+
+class Foo:
+    def __init__(self):    
+        self.a = 1
+        self.b = 1.5
+        self.c = "a string"
+        self.d = ["a", "list", "of", "strings"]
+
+    def save_settings(self):
+        print(self.__dict__)
+        with open("settings.json", "w") as f:
+            json.dump(self.__dict__, f, indent=4)
+    
+    def load_settings(self):
+        print(self.__dict__)
+        with open("settings.json", "r") as f:
+            settings = json.load(f)
+        self.__dict__.update(settings)
+```
+
+```python
+F = Foo()
+F.a = 100
+```
+
+```python
+F.save_settings()
+```
+
+```python
+F.a = 53
+F.a
+```
+
+```python
+F.load_settings()
+F.a
+```
+
+```python
+F.__dict__
+```
+
+# Reverse compatibility? 
+
+```python
+import json
+
+class Foo2:
+    def __init__(self):    
+        self.a = 1
+        self.b = 1.5
+        self.c = "a string"
+        self.d = ["a", "list", "of", "strings"]
+        self.e = "new"
+
+    def save_settings(self):
+        print(self.__dict__)
+        with open("settings.json", "w") as f:
+            json.dump(self.__dict__, f, indent=4)
+    
+    def load_settings(self):
+        print(self.__dict__)
+        with open("settings.json", "r") as f:
+            settings = json.load(f)
+        self.__dict__.update(settings)
+```
+
+```python
+F2 = Foo2()
+```
+
+```python
+F2.load_settings()
+```
+
+# Python class strangeness...
+
+```python
+class Bar:
+    a = 1
+    b = 10
+```
+
+```python
+B = Bar()
+```
+
+```python
+B.__dict__
+```
+
+```python
+B.a
+```
+
+```python
+B.__dict__
+```
+
+```python
+B.a = 10
+```
+
+```python
+B.__dict__
 ```
