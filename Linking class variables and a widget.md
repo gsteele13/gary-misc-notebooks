@@ -124,8 +124,6 @@ class Plotter(HasTraits):
     b = Float(0)
     
     def __init__(self):
-        self.a = 1.0
-        self.b = 0
         self.x = np.linspace(0,20,1000)
     
     def open_plot(self):
