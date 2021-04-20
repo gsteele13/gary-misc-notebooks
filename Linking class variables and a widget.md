@@ -162,8 +162,24 @@ display(widgets.HBox(controls))
 ```
 
 ```python
+P.traits()
+```
+
+```python
 # Rerunning the cell above, we can see that the figure number increments each time,
 # which indeed indicates that we are not closing the plt figure objects of the 
 # dangling Plotter objects when overwritten. We can reset this by closing all. 
 plt.close('all')
+```
+
+# Configurable traits
+
+It turns out it is built into the to traitlets library?
+
+https://traitlets.readthedocs.io/en/stable/config.html#configuration-objects-and-files
+
+Looks pretty awesome, will have a look at it!
+
+```python
+
 ```
