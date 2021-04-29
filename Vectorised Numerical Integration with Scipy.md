@@ -5,8 +5,8 @@ jupyter:
     text_representation:
       extension: .md
       format_name: markdown
-      format_version: '1.1'
-      jupytext_version: 1.2.2
+      format_version: '1.3'
+      jupytext_version: 1.10.1
   kernelspec:
     display_name: Python 3
     language: python
@@ -231,7 +231,7 @@ plt.plot(w,np.angle(I+1j*Q))
 
 Pretty awesome! We've reduced the computation time by a factor of more than 100!
 
-<!-- #region -->
+
 ## Varying initial conditions 
 
 Let's try the same thing but now for the Duffing oscillator. 
@@ -248,7 +248,6 @@ alpha = 0.05
 ```
 
 We want x0 to range from -20 to 20 and v0 to range from -60 to 60 in say 100x100 points. Our time integration should run for 100 seconds. We will start with 100 points, but then expand that.
-<!-- #endregion -->
 
 ```python
 m = 1
