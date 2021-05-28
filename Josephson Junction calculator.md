@@ -73,7 +73,13 @@ $I_c R_n = \dfrac{\pi \Delta}{2e}$
 
 https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.10.486
 
-For Aluminum, we will take $ \Delta = 180 \mu$V. We then have:
+For Aluminum, we will take $ \Delta = 173 \mu$V :
+
+https://journals.aps.org/pr/abstract/10.1103/PhysRev.135.A19
+
+(Note, strongly thickeness dependent!)
+
+We then have:
 
 $I_c  = \dfrac{\pi \Delta}{2e R_n}$
 
@@ -81,16 +87,13 @@ We will also add the Ej for the table.
 <!-- #endregion -->
 
 ```python
-Delta = 180e-6 * e # eV / e = Joules
+Delta = 173e-6 * e # eV / e = Joules
 Rn = 100e3
-
 Ic = pi * Delta / 2 / e / Rn
 print(Ic)
-
-Ej = 
 ```
 
-```python
+```python hide_input=false
 html = "<table><th>Rn <th> Ic <th> L_J <th> E_J/h" 
 for a in range(0,6):
     for b in (1,2,5):
@@ -105,4 +108,8 @@ for a in range(0,6):
         html += fmt(Ej/h, "Hz")
 html += "</table>"
 HTML(html)
+```
+
+```python
+
 ```
