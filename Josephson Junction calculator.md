@@ -62,3 +62,47 @@ for a in range(-6,2):
 html += "</table>"
 HTML(html)
 ```
+
+<!-- #region -->
+# Ic to Rn for Aluminum
+
+
+At T=0, The "Ambegaokar-Baratoff" relation for SIS junctions would predict:
+
+$I_c R_n = \dfrac{\pi \Delta}{2e}$
+
+https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.10.486
+
+For Aluminum, we will take $ \Delta = 180 \mu$V. We then have:
+
+$I_c  = \dfrac{\pi \Delta}{2e R_n}$
+
+We will also add the Ej for the table.
+<!-- #endregion -->
+
+```python
+Delta = 180e-6 * e # eV / e = Joules
+Rn = 100e3
+
+Ic = pi * Delta / 2 / e / Rn
+print(Ic)
+
+Ej = 
+```
+
+```python
+html = "<table><th>Rn <th> Ic <th> L_J <th> E_J/h" 
+for a in range(0,6):
+    for b in (1,2,5):
+        Rn = b*10**a
+        Ic = pi * Delta / 2 / e / Rn
+        Lj = Phi0/2/pi/Ic
+        Ej = Phi0*Ic/2/pi
+        html += "<tr>"
+        html += fmt(Rn, "Ohms")
+        html += fmt(Ic, "A")
+        html += fmt(Lj, "H")
+        html += fmt(Ej/h, "Hz")
+html += "</table>"
+HTML(html)
+```
