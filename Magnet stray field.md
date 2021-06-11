@@ -24,9 +24,13 @@ $$
 Let's take $B_0 = 10$ T. 
 
 ```python
-B0 = 10
+B0 = 0.05
 R = 5e-2 # 5 cm
 Z = 50 # meters
 
-B0*R**3/Z**3
+print(B0*R**3/Z**3/1e-9, "nT")
+```
+
+```python
+
 ```
