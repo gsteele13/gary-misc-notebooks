@@ -56,3 +56,10 @@ x_zpf = np.sqrt(h * f / k)
 print("Thermal noise amplitude: %.2e" % x_300K)
 print("Zero point amplitude: %.2e" % x_zpf)
 ```
+
+```python
+Q = 50
+Sxx_peak = x_300K**2 / f * Q
+
+print("sqrt(Sxx_peak) 300K: %.2e" % Sxx_peak**0.5, "m/sqrt(Hz)")
+```
