@@ -66,11 +66,7 @@ p.line(x,y)
 show(p)
 ```
 
-```python
-l.data_source.data = dict(x=x, y=y**2)
-```
-
-# Reference code: Interacting with data
+# Reference code: Interacting with changing data
 
 This requires a bit more work, and also some understanding of how Bokeh works. To change the data in a Bokeh plot, you need to change the data source of the line. This can be done pretty easily by keeping a copy of the line object that is created, which contains a `ColumnDataSource` object, which itself contains a data dictionary. To update the data in the line, we just have to change the data that this dictionary contains. 
 
@@ -110,4 +106,8 @@ def update_plot(a=a, b=b):
     push_notebook(handle=target)
     
 interact(update_plot, a=(0,200,1), b=(0,200,1));
+```
+
+```python
+
 ```
