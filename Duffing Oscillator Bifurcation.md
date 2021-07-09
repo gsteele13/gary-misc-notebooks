@@ -132,7 +132,7 @@ for O in Omega:
     theta.append(t)
 A = np.array(A)
 theta = np.array(theta)
-plt.plot(Omega,np.real(A))
+plt.plot(Omega,np.real(A[:,2]))
 plt.xlabel("$\Omega$")
 plt.ylabel("Real part of $A$")
 plt.show()
@@ -142,4 +142,118 @@ plt.ylabel("Imag part of $A$")
 plt.show()
 ```
 
-OK, this is giving nonsense. 
+OK, this is giving nonsense! Let's debug by looking at the polynomial. First, alpha = 0:
+
+```python
+def plot_poly():
+    zeta = 0.5/Q
+    rho = 1-Omega**2
+    sigma = 2*zeta*Omega
+    p = np.zeros(4)
+    p[0] = 9*alpha**2
+    p[1] = 24*alpha*rho
+    p[2] = 16*(rho**2+sigma**2)
+    p[3] = -16*phi**2
+    poly = p[0]*y**3 + p[1]*y**2 + p[2]*y + p[3]
+    plt.plot(y,np.abs(poly))
+    plt.axhline(0,ls=":", c='grey')
+    plt.xscale('log')
+    plt.yscale('log')
+```
+
+```python
+Q = 100
+alpha = 0.3
+phi = 1e-6
+Omega = 1
+
+y = np.geomspace(1e-9,1e-6,1000)
+plot_poly()
+```
+
+OK, this seems reasonable? Let's check amplitude and phase. 
+
+```python
+find_amp_phase(Omega,phi,Q,alpha)
+```
+
+OK, there seems to be some kind of numerical error when when alpha is small or phi is small. 
+
+OK, found it. I needed to decrease phi. 
+
+```python
+from ipywidgets import interact
+
+phi_ind = np.geomspace(1e-4,1e-1,20)
+
+def update_plot(n=0):
+    phi = phi_ind[n]
+    Omega = np.linspace(0.8,1.2,1000)
+    alpha = 0.1
+    Q = 100
+    A = []
+    theta = []
+    for O in Omega:
+        a,t = find_amp_phase(O,phi,Q,alpha)
+        A.append(a)
+        theta.append(t)
+    A = np.array(A)
+    theta = np.array(theta)
+    plt.subplots(figsize=(15,4))
+    plt.subplot(121)
+    for i in range(3):
+        plt.plot(Omega,np.real(A[:,i]))
+    plt.xlabel("$\Omega$")
+    plt.ylabel("Real part of $A$")
+    plt.yscale('log')
+    plt.axhline(0,ls=":",c="grey")
+    plt.axvline(1,ls=":",c="grey")
+    plt.subplot(122)
+    plt.plot(Omega,np.imag(A))
+    plt.xlabel("$\Omega$")
+    plt.ylabel("Imag part of $A$")
+    plt.axhline(0,ls=":",c="grey")
+    plt.axvline(1,ls=":",c="grey")
+    plt.show()
+
+interact(update_plot, n = (0,len(phi_ind)-1,1))
+```
+
+```python
+from ipywidgets import interact
+
+phi_ind = np.geomspace(1e-4,1e-1,20)
+
+def update_plot(n=0):
+    phi = phi_ind[n]
+    Omega = np.linspace(0.9,1.1,1000)
+    alpha = 0.1
+    Q = 100
+    A = []
+    theta = []
+    for O in Omega:
+        a,t = find_amp_phase(O,phi,Q,alpha)
+        A.append(a)
+        theta.append(t)
+    A = np.array(A)
+    theta = np.array(theta)
+    plt.subplots(figsize=(15,4))
+    plt.subplot(121)
+    for i in range(3):
+        index = np.where(np.imag(A[:,i]) == 0)
+        if len(index[0]) > 1:
+            plt.plot(Omega[index],np.real(A[index,i][0,:]),'.')
+    plt.xlabel("$\Omega$")
+    plt.ylabel("Real part of $A$")
+    plt.axhline(0,ls=":",c="grey")
+    plt.axvline(1,ls=":",c="grey")
+    plt.subplot(122)
+    plt.plot(Omega,np.imag(A))
+    plt.xlabel("$\Omega$")
+    plt.ylabel("Imag part of $A$")
+    plt.axhline(0,ls=":",c="grey")
+    plt.axvline(1,ls=":",c="grey")
+    plt.show()
+
+interact(update_plot, n = (0,len(phi_ind)-1,1))
+```
