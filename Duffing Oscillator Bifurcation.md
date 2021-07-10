@@ -189,7 +189,7 @@ phi_ind = np.geomspace(1e-4,1e-1,20)
 def update_plot(n=0):
     phi = phi_ind[n]
     Omega = np.linspace(0.8,1.2,1000)
-    alpha = 0.1
+    alpha = -0.1
     Q = 100
     A = []
     theta = []
@@ -206,7 +206,7 @@ def update_plot(n=0):
     plt.xlabel("$\Omega$")
     plt.ylabel("Real part of $A$")
     plt.yscale('log')
-    plt.axhline(0,ls=":",c="grey")
+    plt.axhline(0.2,ls=":",c="grey")
     plt.axvline(1,ls=":",c="grey")
     plt.subplot(122)
     plt.plot(Omega,np.imag(A))
@@ -227,7 +227,7 @@ phi_ind = np.geomspace(1e-4,1e-1,20)
 def update_plot(n=0):
     phi = phi_ind[n]
     Omega = np.linspace(0.9,1.1,1000)
-    alpha = 0.1
+    alpha = -0.1
     Q = 100
     A = []
     theta = []
@@ -242,10 +242,12 @@ def update_plot(n=0):
     for i in range(3):
         index = np.where(np.imag(A[:,i]) == 0)
         if len(index[0]) > 1:
-            plt.plot(Omega[index],np.real(A[index,i][0,:]),'.')
+            plt.plot(Omega[index],np.real(A[index,i][0,:]))
     plt.xlabel("$\Omega$")
+    plt.ylim(0,2)
     plt.ylabel("Real part of $A$")
     plt.axhline(0,ls=":",c="grey")
+    plt.axhline(0.35,ls=":",c="grey")
     plt.axvline(1,ls=":",c="grey")
     plt.subplot(122)
     plt.plot(Omega,np.imag(A))
@@ -256,4 +258,68 @@ def update_plot(n=0):
     plt.show()
 
 interact(update_plot, n = (0,len(phi_ind)-1,1))
+```
+
+# Two-tone susceptibility
+
+This is the condition of driving with one tone and then measuring the linear response using a second tone. Parametrised a bit differently...
+
+![image.png](attachment:image.png)
+
+
+Mapping to above: 
+
+```
+kappa => 2 * zeta
+K => alpha
+```
+
+```python
+alpha = 0.9
+
+k = 2*zeta
+beta = alpha
+Omega = 1
+n = phi/kext
+
+
+def amplitude(n):
+	a = beta**2
+	b = -2*(w_s-w_0)*beta
+	c = (w_s-w_0)**2 + k**2/4
+	d = -kext*n
+	coeff = [a, b, c, d]
+	a_1, a_2, a_3 = np.roots(coeff)
+
+	#Replace complex roots by -1
+
+	if np.imag(a_1) == 0:
+		a_1 = np.real(a_1)
+	else:
+		a_1 = -1
+	if np.imag(a_2) == 0:
+		a_2 = np.real(a_2)
+	else:
+		a_2 = -1
+	if np.imag(a_3) == 0:
+		a_3 = np.real(a_3)
+	else:
+		a_3 = -1
+	roots = [a_1, a_2, a_3]
+
+	#Find smallest real and positive solution for the low-amplitude branch 
+    #(If you are interested in the high-amplitude branch, just replace 'min' by 'max')
+	n_c = min([alpha for alpha in roots if alpha>0])
+	alpha_0 = np.sqrt(n_c)
+	return(alpha_0)
+
+def Chi_p(Omega):
+	return(1/(k/2 + 1j*(Delta_p - 2*beta*n_c + Omega)))
+
+def Chi_g(Omega):
+	return(Chi_p(Omega)/(1 - beta**2*n_c**2*Chi_p(Omega)*np.conj(Chi_p(-Omega + 2*Omega_dp))))
+```
+
+```python
+
 ```
