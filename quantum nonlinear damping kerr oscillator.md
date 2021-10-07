@@ -238,3 +238,19 @@ y2 /= y2[0]
 plt.plot(t,y1)
 plt.plot(t,y2)
 ```
+
+Also fun: ring up and down
+
+```python
+t2 = np.append(t,t)
+y1 = np.real(expect(ringup.states, op))
+y1 = np.append(y1,np.real(expect(ringdown.states, op)))
+y2 = np.real(expect(ringup_linear.states, op))
+y2 = np.append(y2,np.real(expect(ringdown_linear.states, op)))
+plt.plot(t2,y1)
+plt.plot(t2,y2)
+```
+
+```python
+
+```
