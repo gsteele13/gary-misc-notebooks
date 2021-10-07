@@ -242,15 +242,11 @@ plt.plot(t,y2)
 Also fun: ring up and down
 
 ```python
-t2 = np.append(t,t)
+t2 = np.append(t,t+t[-1])
 y1 = np.real(expect(ringup.states, op))
 y1 = np.append(y1,np.real(expect(ringdown.states, op)))
 y2 = np.real(expect(ringup_linear.states, op))
 y2 = np.append(y2,np.real(expect(ringdown_linear.states, op)))
 plt.plot(t2,y1)
 plt.plot(t2,y2)
-```
-
-```python
-
 ```
