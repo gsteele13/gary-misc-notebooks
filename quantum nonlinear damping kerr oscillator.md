@@ -231,6 +231,32 @@ plt.axhline(0,ls=':',c='grey')
 ```
 
 ```python
+plt.figure(figsize=(6,6))
+y1 = np.real(expect(ringdown.states, op))
+y2 = np.real(expect(ringdown_linear.states, op))
+plt.plot(t,y1)
+plt.plot(t,y2)
+plt.plot(t, 1.55*np.exp(-gamma*t/2),c='grey', ls=':')
+gamma_nl = y2[0]/y1[0]*gamma
+plt.plot(t, y1[0]*np.exp(-gamma_nl*t/2),c='grey', ls=':')
+plt.axhline(0,ls=':',c='grey')
+plt.yscale('log')
+plt.ylim(1e-2,5)
+plt.xlim(-5,100)
+```
+
+```python
+y3 = np.log(y1)
+y4 = np.log(y2)
+plt.plot(t[1:],-np.diff(y3))
+plt.plot(t[1:],-np.diff(y4))
+#plt.ylim(0,0.2)
+plt.ylabel("Decay rate")
+plt.xlabel("Time")
+#plt.xlim(0,100)
+```
+
+```python
 y1 = np.real(expect(ringdown.states, op))
 y2 = np.real(expect(ringdown_linear.states, op))
 y1 /= y1[0]
@@ -250,3 +276,5 @@ y2 = np.append(y2,np.real(expect(ringdown_linear.states, op)))
 plt.plot(t2,y1)
 plt.plot(t2,y2)
 ```
+
+It could be that we have ended up a bit detuned...? That might explain the ringing. Maybe I need to decrease (well, actually, increase, since I've chosen K>0) the speed of the rotating frame?
