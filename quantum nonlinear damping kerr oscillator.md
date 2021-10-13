@@ -278,3 +278,74 @@ plt.plot(t2,y2)
 ```
 
 It could be that we have ended up a bit detuned...? That might explain the ringing. Maybe I need to decrease (well, actually, increase, since I've chosen K>0) the speed of the rotating frame?
+
+
+# Classical nonlinear damping
+
+I think we can approximate the classical nonlinear damping (to a good degree) by using a collapse operator a^dagger a a...?
+
+```python
+N = 30
+a = destroy(N)
+eps = 0.1
+K = 0.01
+H_d = eps*(a+a.dag()) 
+H_K = K*a.dag()*a.dag()*a*a
+
+gamma = 0.1 # Q = 10
+beta = 0.2
+c_ops = [np.sqrt(gamma) * a]
+c_ops2 = [np.sqrt(gamma) * a, beta*np.sqrt(beta) * a.dag()*a*a]
+
+
+psi0 = basis(N, 0)
+
+t = np.linspace(0, 20/gamma, 101)
+ringup = mesolve(H_d + H_K, psi0, t, c_ops)
+ringup_nld = mesolve(H_d, psi0, t, c_ops2)
+ringup_linear = mesolve(H_d, psi0, t, c_ops)
+
+op = 1j*(a-a.dag())
+plt.plot(t,np.real(expect(ringup.states, op)), label="Kerr")
+plt.plot(t,np.real(expect(ringup_nld.states, op)), label="NLD")
+plt.plot(t,np.real(expect(ringup_linear.states, op)), label="Linear")
+plt.legend()
+plt.axhline(0,ls=':',c='grey')
+
+final_state = ringup.states[-1]
+final_state_nld = ringup_nld.states[-1]
+final_state_linear = ringup_linear.states[-1]
+```
+
+```python
+t = np.linspace(0, 20/gamma, 101)
+ringdown = mesolve(H_K, final_state, t, c_ops)
+ringdown_nld = mesolve(H_K, final_state_nld, t, c_ops2)
+ringdown_linear = mesolve(0*H_K, final_state_linear, t, c_ops)
+```
+
+```python
+op = 1j*(a-a.dag())
+plt.plot(t,np.real(expect(ringdown.states, op)))
+plt.plot(t,np.real(expect(ringdown_nld.states, op)))
+plt.plot(t,np.real(expect(ringdown_linear.states, op)))
+plt.axhline(0,ls=':',c='grey')
+plt.yscale('log')
+plt.xlim(0,40)
+plt.ylim(1e-1,10)
+```
+
+```python
+def plot(y):
+    y = y/y[0]
+    y2 = np.diff(np.log(y))
+    plt.plot(t[:-1],-y2)
+
+plot(np.real(expect(ringdown.states, op)))
+plot(np.real(expect(ringdown_nld.states, op)))
+plot(np.real(expect(ringdown_linear.states, op)))
+```
+
+```python
+
+```
