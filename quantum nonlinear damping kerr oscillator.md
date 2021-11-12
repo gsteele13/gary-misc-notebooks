@@ -198,6 +198,11 @@ K = 0.01
 H_d = eps*(a+a.dag()) 
 H_K = K*a.dag()*a.dag()*a*a
 
+# We need to correct for the frequency shift...?
+# Or maybe there is no way to correct for it for the ring-up 
+# since the frequency shift is amplitude dependent
+H_K_rot =  -K*a.dag()*a
+
 gamma = 0.1 # Q = 10
 c_ops = [np.sqrt(gamma) * a]
 
@@ -205,10 +210,12 @@ psi0 = basis(N, 0)
 
 t = np.linspace(0, 20/gamma, 101)
 ringup = mesolve(H_d + H_K, psi0, t, c_ops)
+ringup_rot = mesolve(H_d + H_K + H_K_rot, psi0, t, c_ops)
 ringup_linear = mesolve(H_d, psi0, t, c_ops)
 
 op = 1j*(a-a.dag())
 plt.plot(t,np.real(expect(ringup.states, op)))
+plt.plot(t,np.real(expect(ringup_rot.states, op)))
 plt.plot(t,np.real(expect(ringup_linear.states, op)))
 plt.axhline(0,ls=':',c='grey')
 
@@ -315,6 +322,12 @@ plt.axhline(0,ls=':',c='grey')
 final_state = ringup.states[-1]
 final_state_nld = ringup_nld.states[-1]
 final_state_linear = ringup_linear.states[-1]
+```
+
+```python
+plot_wigner(ringup.states[-1])
+plot_wigner(ringup_nld.states[-1])
+plot_wigner(ringup_linear.states[-1])
 ```
 
 ```python

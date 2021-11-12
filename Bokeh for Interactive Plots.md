@@ -49,6 +49,12 @@ import numpy as np
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure, show
 from bokeh.io import output_notebook
+
+# For if you have no internet connection, like on the plane...
+from bokeh.resources import INLINE
+output_notebook(INLINE)
+
+# This will import the latest compatible bokeh JS from the CDN
 output_notebook()
 ```
 
