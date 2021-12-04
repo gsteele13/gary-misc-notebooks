@@ -115,4 +115,4 @@ for f in "f_upper", "f_upper - 25", "f_car", "f_lower":
 
 ```
 
-That's probably not going to cut it in terms of carrier suppression. 
+That's probably not going to cut it in terms of image suppression. 
