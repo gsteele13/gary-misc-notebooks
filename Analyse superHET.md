@@ -100,8 +100,7 @@ dbi = np.interp(fi,f,db)
 ```
 
 ```python
-f = 6300
-dbi[np.where(fi == 6300)]
+dbi[np.where(fi == 10330-500)]
 ```
 
 ```python
@@ -116,3 +115,35 @@ for f in "f_upper", "f_upper - 25", "f_car", "f_lower":
 ```
 
 That's probably not going to cut it in terms of image suppression. 
+
+
+# Calculate required rolloff
+
+```python
+f_if = 300
+bw_if = 100
+dB_image = 70
+print("freq off = ", 2*f_if-bw_if/2)
+```
+
+```python
+f_if = 350
+bw_if = 100
+dB_image = 70
+print("freq off = ", 2*f_if-bw_if/2)
+```
+
+```python
+f_if = 300
+bw_if = 50
+dB_image = 70
+print("freq off = ", 2*f_if-bw_if/2)
+```
+
+```python
+10000-550
+```
+
+```python
+
+```
