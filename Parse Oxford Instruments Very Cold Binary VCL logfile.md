@@ -21,6 +21,35 @@ import pandas as pd
 import string
 ```
 
+# The final function
+
+```python
+def load_vcl(file):
+    with open(file, "rb") as f:
+        byte_stream = bytearray(f.read())
+
+    column_names_bytes = byte_stream[0x400+0x1400:0x400+0x1400+0x1700]
+    column_names = list()
+
+    for i in range(184):
+        b = column_names_bytes[i*32:(i+1)*32]
+        if b[0] != 0:
+            s = b.decode().rstrip("\x00")
+            column_names.append(s)
+
+    # This is where data starts
+    data_bytes = byte_stream[0x3000:]
+    # Truncate it to a full row
+    bytes_full_records = int(len(data_bytes)/8/len(column_names))*8*len(column_names)
+    data_bytes = data_bytes[0:bytes_full_records]
+    # Now convert from bytes to double floating point and reshape
+    data = np.frombuffer(data_bytes, 'd')
+    data = np.reshape(data, [len(data)//len(column_names),len(column_names)])
+    return pd.DataFrame(data, columns=column_names)
+```
+
+# The debugging process
+
 ```python
 base_path = "/home/jovyan/cryo_logs/triton_logs/LogFiles/58487 Steele/"
 vcl_files = glob.glob(base_path + "*.vcl")
