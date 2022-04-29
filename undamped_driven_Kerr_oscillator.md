@@ -6,9 +6,9 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.10.1
+      jupytext_version: 1.13.6
   kernelspec:
-    display_name: Python 3
+    display_name: Python 3 (ipykernel)
     language: python
     name: python3
 ---
@@ -124,9 +124,15 @@ Start with eps = 0.
 
 ```python
 eps = 0
-H = a.dag()*a.dag()*a*a + 1j*eps*(a.dag()-a)
+H = a.dag()*a - 0.1 * a.dag()*a.dag()*a*a + 1j*eps*(a.dag()-a)
 vals, vecs = H.eigenstates()
+```
 
+```python
+plt.plot(vals)
+```
+
+```python
 wigners = make_winger_functions(vecs)
 anim = make_wigner_animation(wigners)
 anim
@@ -213,3 +219,29 @@ vals[1]
 ```
 
 Difference in energy between 0 and 1 eigenstates of this potential is the Rabi frequency
+
+
+# Kerr oscillator Eigenstates 
+
+
+Now go out of the rotating frame and consider
+
+```python
+N = 30
+a = destroy(N)
+H = a.dag()*a + 0.1 * a.dag()*a.dag()*a*a
+vals, vecs = H.eigenstates()
+plt.plot(vals, 'o-')
+```
+
+```python
+
+```
+
+```python
+plot_wigner(vecs[8])
+```
+
+```python
+
+```
