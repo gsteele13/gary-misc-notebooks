@@ -313,9 +313,9 @@ OK, that is totally the way to look at it! You can see the flux qubit, and also 
 phi = np.linspace(-3,3,100)
 
 def E(flux_sum, flux_diff, r, delta):
-    E = (phi+flux)**2
-    E += r*np.cos(np.pi*flux_sum)*np.cos(np.pi*(phi+flux_sum))
-    E += r*delta*np.sin(np.pi*flux_sum)*np.sin(np.pi*(phi+flux_sum))
+    E = (phi)**2
+    E += 2*r*np.cos(np.pi*flux_sum)*np.cos(np.pi*(phi+flux_diff))
+    E += 2*r**delta*np.sin(np.pi*flux_sum)*np.sin(np.pi*(phi+flux_diff))
     return E
 
 p = figure(height=600, width=800)
@@ -341,7 +341,7 @@ p.yaxis.axis_label = "E(Phase)"
 p.sizing_mode = "scale_width"
 
 x = phi
-y = E(0,0.5)
+y = E(0,0.5, 0.1, 0)
 l = p.line(x, y)
 x1,yd1,x2,yd2,x3,yd3,x4,yd4 = diffs(x,y)
 l1 = p.line(x1,yd1, line_color='black') # slope is black (zeros are minima)
@@ -351,9 +351,9 @@ l4 = p.line(x4,yd4, line_color='green') # Kerr is green
 target = show(p, notebook_handle=True)
 print("All normalised!\nBlack = Slope (zero = minimum), Blue = inverse stiffness, Red = Cubic term, Green = Kerr")
 
-def update_plot(flux=0, r=0.5, hide=1):
+def update_plot(flux_sum=0, flux_diff=0, delta=0, r=0.5, hide=1):
     x = phi
-    y = E(flux,r)
+    y = E(flux_sum, flux_diff, r, delta)
     x1,yd1,x2,yd2,x3,yd3,x4,yd4 = diffs(x,y)
     l.data_source.data = dict(x=x, y=y)
     l1.data_source.data = dict(x=x1,y=yd1)
@@ -364,5 +364,17 @@ def update_plot(flux=0, r=0.5, hide=1):
         line.visible = not bool(hide)
     push_notebook(handle=target)
     
-interact(update_plot, flux=(-2,2,0.01), r=(0,1,0.01), hide=(0,1,1))
+# flux_sum, flux_diff, r, delta
+interact(update_plot, 
+         flux_sum=(-2,2,0.01), 
+         flux_diff=(-2,2,0.01),
+         delta = (0,1,0.01),
+         r=(0,1,0.01), 
+         hide=(0,1,1))
+
+
+```
+
+```python
+
 ```
