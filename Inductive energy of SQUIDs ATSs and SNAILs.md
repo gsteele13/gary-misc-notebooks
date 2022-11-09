@@ -314,27 +314,32 @@ phi = np.linspace(-3,3,100)
 
 def E(flux_sum, flux_diff, r, delta):
     E = (phi)**2
-    E += 2*r*np.cos(np.pi*flux_sum)*np.cos(np.pi*(phi+flux_diff))
-    E += 2*r**delta*np.sin(np.pi*flux_sum)*np.sin(np.pi*(phi+flux_diff))
+    E += -2*r*np.cos(np.pi*flux_sum)*np.cos(np.pi*(phi+flux_diff))
+    E += 2*r*delta*np.sin(np.pi*flux_sum)*np.sin(np.pi*(phi+flux_diff))
     return E
+```
 
+```python
 p = figure(height=600, width=800)
 p.y_range = Range1d(-1.1,5.1)
 
 def diffs(x,y):
     yd1 = np.diff(y,n=1)
     x1 = (x[0:-1]+x[1:])/2
-    yd1 = yd1/np.max(yd1)
+    #yd1 = yd1/np.max(yd1)
     yd2 = np.diff(y,n=2)
     x2 = x[1:-1]
-    yd2 = yd2/np.max(yd2)
+    #yd2 = yd2/np.max(yd2)
     yd3 = np.diff(y,n=3)
-    yd3 = yd3/np.max(yd3)
+    #yd3 = yd3/np.max(yd3)
     x3 = (x[2:-1]+x[1:-2])/2
     yd4 = np.diff(y,n=4)
-    yd4 = yd4/np.max(yd4)
+    #yd4 = yd4/np.max(yd4)
     x4 = x[2:-2]
-    return x1,yd1,x2,yd2,x3,yd3,x4,yd4
+    #return x1,yd1,x2,yd2,x3,yd3,x4,yd4
+    dx = x[1]-x[0]
+    return x1,yd1/dx**0.5,x2,yd2/dx,x3,yd3/dx**1.5,x4,yd4/dx**2
+
 
 p.xaxis.axis_label = "Phase"
 p.yaxis.axis_label = "E(Phase)"
@@ -371,7 +376,9 @@ interact(update_plot,
          delta = (0,1,0.01),
          r=(0,1,0.01), 
          hide=(0,1,1))
+```
 
+```python
 
 ```
 
