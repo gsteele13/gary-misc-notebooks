@@ -6,9 +6,9 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.10.1
+      jupytext_version: 1.13.6
   kernelspec:
-    display_name: Python 3
+    display_name: Python 3 (ipykernel)
     language: python
     name: python3
 ---
@@ -75,6 +75,18 @@ x_t = F_t * H
 # is of imaginary type, so we have to use np.real to avoid complaints
 # from matplotlib during plotting
 x = np.real(np.fft.ifft(x_t))
+```
+
+```python
+import sys
+```
+
+```python
+len(x)
+```
+
+```python
+sys.getsizeof(x)
 ```
 
 We can now plot this too to see what the oscillations look like. We will not plot all 50 million points, Bokeh does not like that so much...but instead plot only the first 100,000. 
