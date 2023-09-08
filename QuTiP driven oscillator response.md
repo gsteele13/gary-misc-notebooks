@@ -121,10 +121,6 @@ Great, this makes sense, we see the "Kerr shift" / frequency shift we expect for
 ## Kerr oscillator in strong-anharmonicity (transmon) limit 
 
 ```python
-
-```
-
-```python
 gamma = 0.01
 eps_2 = 0.01
 a = destroy(5)
