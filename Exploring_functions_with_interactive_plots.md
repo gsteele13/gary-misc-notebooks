@@ -5,10 +5,10 @@ jupyter:
     text_representation:
       extension: .md
       format_name: markdown
-      format_version: '1.1'
-      jupytext_version: 1.2.2
+      format_version: '1.3'
+      jupytext_version: 1.15.2
   kernelspec:
-    display_name: Python 3
+    display_name: Python 3 (ipykernel)
     language: python
     name: python3
 ---
@@ -48,7 +48,6 @@ def update2(w = 1.0, phi= 0):
 interact(update2, w=(0,10,0.1), phi=(0,4*np.pi,4*np.pi/100))
 ```
 
-<!-- #region -->
 **Exercise** Create an interactive widget to make two interactive plots of the amplitude and phase response of the <a href=https://en.wikipedia.org/wiki/Harmonic_oscillator#Sinusoidal_driving_force>sinusoidally driven damped harmonic oscillator</a>.
 
 * Take mass $m = 1$ kg, spring constant $k = 1$ N/m, and friction coefficient $c = 0.1$ as the default values for your sliders. 
@@ -67,7 +66,6 @@ Note that depending on how you program your functions, you might run into "divis
 ```
 np.seterr(divide='ignore', invalid='ignore')
 ```
-<!-- #endregion -->
 
 ```python
 # Solutions 
