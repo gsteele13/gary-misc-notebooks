@@ -6,11 +6,11 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.13.6
+      jupytext_version: 1.15.2
   kernelspec:
-    display_name: Python 3 (ipykernel)
+    display_name: Python [conda env:.conda-gary_default]
     language: python
-    name: python3
+    name: conda-env-.conda-gary_default-py
 ---
 
 ```python
@@ -255,7 +255,7 @@ def E(flux, r):
     E += r*(1-np.cos(np.pi*(phi-flux)))
     return E
 
-p = figure(height=600, width=800)
+p = figure(height=300, width=800)
 p.y_range = Range1d(-1.1,5.1)
 
 def diffs(x,y):
