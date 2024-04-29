@@ -176,6 +176,10 @@ It also also the same origin of other apparent non-unitary evolution in a cohere
 
 https://nsweb.tn.tudelft.nl/~gsteele/misc/QSM_Project_Unitary_Exponential%20Decay.html
 
+If we scale up the size of the environment, with a random distribution of couplings, and a random distribution of initial states, we should be able to see a convergence to an exponential suppression of coherence of superposition states of the environment. 
+
+To do for future additions to this notebook!
+
 ```python
 
 ```
