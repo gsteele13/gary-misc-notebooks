@@ -77,7 +77,13 @@ result = sesolve(H, psi0, t)
 psi = result.states
 
 rho_qubit = [ptrace(k,0) for k in psi]
+```
 
+```python
+make_animation(rho_qubit)
+```
+
+```python
 rho12 = expect(projection(2,0,1), rho_qubit)
 plt.plot(np.real(rho12))
 plt.plot(np.imag(rho12))
@@ -220,7 +226,92 @@ To do for future additions to this notebook!
 
 ```
 
-# Appendix: Re-figuring-out Bloch Sphere Animations
+# Analytical formula from Zurek
+
+
+![IMG_1590.jpg](attachment:IMG_1590.jpg)
+
+
+![IMG_1591.jpg](attachment:IMG_1591.jpg)
+
+```python
+N_values = np.append(np.array([0,1,]*10), np.array(range(100)))
+
+fig,ax = plt.subplots(figsize=(12,4))
+fig.clear()
+
+t = np.linspace(0,500,5000)
+g_std = 0.1 # how much variation in g do we allow
+r = np.ones(len(t))*1j
+
+N = 0
+plt.subplot(121)
+l1, = plt.plot(t,np.real(r), ":")
+l2, = plt.plot(t,np.imag(r), ":")
+l3, = plt.plot(t,np.abs(r))
+plt.ylim(-1.1,1.1)
+plt.ylabel("Real / Imag / Abs r(t)")
+plt.xlabel("t")
+title = plt.title("N = %d" % N)
+plt.subplot(122)
+l4, = plt.plot(t,np.real(r), ":")
+l5, = plt.plot(t,np.imag(r), ":")
+l6, = plt.plot(t,np.abs(r))
+plt.ylabel("Real / Imag / Abs r(t)")
+plt.xlabel("t")
+plt.xlim(0,10)
+plt.ylim(-1.1,1.1)
+    
+def update(i):
+    r = np.ones(len(t))*1j
+    N = N_values[i]
+    for i in range(N):
+        g_k = np.random.normal()*g_std
+        beta_k_squared = np.random.random()
+        r *= np.cos(2*g_k*t) + 1j*(1-2*beta_k_squared)*np.sin(2*g_k*t)
+    l1.set_data(t,np.real(r))
+    l2.set_data(t,np.imag(r))
+    l3.set_data(t,np.abs(r))
+    l4.set_data(t,np.real(r))
+    l5.set_data(t,np.imag(r))
+    l6.set_data(t,np.abs(r))
+    title.set_text("N = %d" % N)
+
+anim = animation.FuncAnimation(fig, update, frames=len(N_values), interval=500)
+plt.close(fig)
+```
+
+I have made an animation of an interesting sequence of changing N here below. I start by switching between 0 and 1, to illustrate the random nature with a single environment degree of freedom, then scroll through increasing N up to 100. There are two plots, one showing times up to "500" (in some unit related to g) and one zoomed in in the range of times from 0 to 10, where you can see the typical timescale on which coherence is destroyed even for moderate N. 
+
+```python
+anim
+```
+
+```python
+
+```
+
+```python
+
+```
+
+```python
+
+```
+
+```python
+
+```
+
+```python
+
+```
+
+```python
+
+```
+
+# Appendix: Re-figuring-out how Bloch sphere animations work
 
 ```python
 from qutip import *
