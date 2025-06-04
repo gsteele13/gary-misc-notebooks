@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.16.1
+      jupytext_version: 1.16.7
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -44,15 +44,20 @@ Again, although I tried my best not to, I am now of the opinion that the best th
 Here is a simple reference code to generate a Bokeh plot for exploring data. I choose to scale the plot to be full width of the notebook HTML. 
 
 ```python
+import bokeh
+bokeh.__version__
+```
+
+```python
 import numpy as np
 
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure, show
 from bokeh.io import output_notebook
 
-# For if you have no internet connection, like on the plane...
-from bokeh.resources import INLINE
-output_notebook(INLINE)
+# # For if you have no internet connection, like on the plane...
+# from bokeh.resources import INLINE
+# output_notebook(INLINE)
 
 # This will import the latest compatible bokeh JS from the CDN
 output_notebook()
@@ -88,6 +93,11 @@ from bokeh.io import output_notebook, push_notebook
 output_notebook()
 
 from ipywidgets import interact
+```
+
+```python
+import bokeh
+bokeh.__version__
 ```
 
 ```python
